@@ -15,6 +15,12 @@ import os
 import csv
 import numpy as np
 import matplotlib
+
+# Detect headless environment (no display) and switch backend before pyplot import
+_HEADLESS = not os.environ.get('DISPLAY', '') and not os.environ.get('WAYLAND_DISPLAY', '')
+if _HEADLESS:
+    matplotlib.use('Agg')
+
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from mpl_toolkits.mplot3d import Axes3D  # noqa: F401 — registers 3D projection
@@ -264,7 +270,10 @@ def build_and_run(amplitude, phase, save_gif):
         except Exception as e:
             print(f"GIF save failed: {e}\n  Install pillow:  pip install pillow")
 
-    plt.show()
+    if not _HEADLESS:
+        plt.show()
+
+    return ani  # keep reference alive until caller returns
 
 
 def _draw_evolution(ax):
@@ -298,7 +307,10 @@ def _draw_evolution(ax):
 
 # ── Entry point ───────────────────────────────────────────────────────────────
 def main():
-    save = '--save' in sys.argv
+    save = '--save' in sys.argv or _HEADLESS  # always save when there's no display
+
+    if _HEADLESS:
+        print("No display detected — will save chimp_locomotion.gif automatically.")
 
     if not os.path.exists('best_parameters.csv'):
         print("best_parameters.csv not found — run the GA first:\n"
