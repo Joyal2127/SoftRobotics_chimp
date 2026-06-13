@@ -20,14 +20,14 @@ constexpr double GROUND_Z    = -0.5;
 constexpr double OMEGA       = 8.0;      // rad/s — actuation wave speed
 constexpr double DT          = 0.005;    // s — stable below 2/ω_natural
 constexpr double TOTAL_TIME  = 3.0;      // s — evaluation window
-constexpr double SPRING_K    = 3000.0;   // N/m
-constexpr double SPRING_DAMP = 30.0;     // Ns/m — dashpot
+constexpr double SPRING_K    = 200.0;    // N/m — soft robot; 6 springs/node → k_eff=1200, dt_crit=0.058s >> DT
+constexpr double SPRING_DAMP = 3.0;      // Ns/m — dashpot (ζ≈0.33, lightly underdamped)
 constexpr double NODE_MASS   = 0.1;      // kg
 constexpr double GRAVITY     = -9.81;    // m/s²
 constexpr double RESTITUTION = 0.4;
 constexpr double FRICTION    = 0.7;      // Coulomb coefficient
 constexpr double AMP_MIN     = 0.0;
-constexpr double AMP_MAX     = 0.5;
+constexpr double AMP_MAX     = 0.25;     // max actuator stroke (m)
 
 // ── Vec3 ──────────────────────────────────────────────────────────────────────
 struct Vec3 {
